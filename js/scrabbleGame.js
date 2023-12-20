@@ -1,7 +1,8 @@
 /*File: scrabbleGame.js
     GUI Assignment: Implementing a Bit of Scrabble with Drag and Drop
     This website displays one line of the Scrabble Board to the user along with seven letter tiles on a tile rack. The user drags tiles to the board to make a word and their score is calculated. 
-    Mustapha Ayad, UMass Lowell Computer Science, mustapha_ayad@student.uml.edu
+    Paschal Ojatabu, UMass Lowell Computer Science,
+    Paschal_Ojatabu@student.uml.edu
     Copyright (c) 2023 by Paschal. All rights reserved. May be freely copied or excerpted for educational purposes with credit to the author. updated by MA on December 20th, 2021 at 3:00 AM*/
 
 //array containing ScrabbleTiles with distribution
