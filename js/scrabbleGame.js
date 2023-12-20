@@ -1,8 +1,7 @@
 /*File: scrabbleGame.js
     GUI Assignment: Implementing a Bit of Scrabble with Drag and Drop
     This website displays one line of the Scrabble Board to the user along with seven letter tiles on a tile rack. The user drags tiles to the board to make a word and their score is calculated. 
-    Paschal Ojatabu, UMass Lowell Computer Science,
-    Paschal_Ojatabu@student.uml.edu
+    Paschal Ojatabu, UMass Lowell Computer Science,Paschal_Ojatabu@student.uml.edu
     Copyright (c) 2023 by Paschal. All rights reserved. May be freely copied or excerpted for educational purposes with credit to the author. updated by MA on December 20th, 2021 at 3:00 AM*/
 
 //array containing ScrabbleTiles with distribution
@@ -39,7 +38,7 @@ ScrabbleTiles["_"] = { "value" : 0,  "original-distribution" : 2,  "number-remai
 var score = 0;
 var totalScore = 0;
 var doubleWordFlag = 0;
-var  lettersUsed = 7;
+var usedTiles = 7;
 
 function createNewTiles() {
     var elements = document.getElementsByClassName("letter");
@@ -86,7 +85,9 @@ function nextWord() {
     var word_score = document.getElementById('score');
     word_score.innerHTML = "0";
     total_score.innerHTML = fillTotalScore;
+    updateLetter()
     createNewTiles();
+    
 }
 
 function restart() {
@@ -94,117 +95,100 @@ function restart() {
     totalScore = 0;
     score = 0;
     doubleWordFlag = 0;
-    lettersUsed = 7;
+    usedTiles = 7;
     var total_score = document.getElementById('totalScore');
     var word_score = document.getElementById('score');
-    var letters = document.getElementById('reminders');
     word_score.innerHTML = "0";
-    total_score.innerHTML = "___";
-    letters.innerHTML = "7";
+    total_score.innerHTML = "___ ";
+    updateLetter()
     createNewTiles();
 
-
 }
-// ... [Previous code, including ScrabbleTiles array and other global variables]
-
-
-
-
+function updateLetter() {
+    
+    var word_use = document.getElementById('remainders');
+    if (word_use) { // Check if the element exists
+        var update = "" + usedTiles;
+        word_use.innerHTML = update;
+    } else {
+        console.error("Element with ID 'reminders' not found.");
+    }
+}
 
 
 $(document).ready(
     function () {
         //https://www.geeksforgeeks.org/jquery-ui-draggable-revertduration-option/
-        //https://www.youtube.com/watch?v=peWrZD0meTs
+       //https://www.youtube.com/watch?v=peWrZD0meTs
         $(".letter").draggable({
             revert: 'invalid'
         });
         $("#rack").droppable({
             accept: ".letter",
             drop: function (event, ui) {
-                // Check if the tile was previously on the board
-        if (ui.draggable.hasClass("OnBoard")) {
-            // Tile was on the board, now moved back to the rack
-            ui.draggable.removeClass("OnBoard").css("left", 0).css('top', 0);
+                if (ui.draggable.hasClass("OnBoard")) {
+                //if the letter was dropped back to the rack, remove it from the board 
+                ui.draggable.removeClass("OnBoard").css("left", 0).css('top', 0);
+                //remove double word bonus if tile dropped back was on doubleword
+                if (ui.draggable.hasClass("doubleWord")) {
+                    ui.draggable.removeClass("doubleWord");
+                    doubleWordFlag -= 1;
 
-            // Check and update double word flag if necessary
-            if (ui.draggable.hasClass("doubleWord")) {
-                ui.draggable.removeClass("doubleWord");
-                doubleWordFlag -= 1;  // Only decrement if tile was on a double word spot
-                
-                
-                //remove letter score from word score if tile dragged back to rack
-                lettersUsed--;
-                score -= ScrabbleTiles[ui.draggable.attr('data-letter')].value;
-                if (doubleWordFlag === 0 || doubleWordFlag < 0 ) {
-                    var fill_score = " " + score;
-                } else if (doubleWordFlag === 1) {
-                    var fill_score = " " + score * 2;
-                } else if (doubleWordFlag === 2) {
-                    var fill_score = " " + score * 4;
                 }
+                //remove letter score from word score if tile dragged back to rack
+                usedTiles -= 1;
+                score -= ScrabbleTiles[ui.draggable.attr('data-letter')].value;
+                if (doubleWordFlag === 0) {
+                    var fill_score = "" + score;
+                } else if (doubleWordFlag === 1) {
+                    var fill_score = "" + score * 2;
+                } else if (doubleWordFlag === 2) {
+                    var fill_score = "" + score * 4;
+                }
+                updateLetter();
                 var word_score = document.getElementById('score');
                 word_score.innerHTML = fill_score;
-                var letters = document.getElementById('reminders');
-                letters.innerHTML = lettersUsed;   
-
-            }
-        } else {
-            // Tile was not on the board, just adjust its position
-            ui.draggable.css("left", 0).css('top', 0);
-        }
-                var fill_score = " " + score;
-                var word_score = document.getElementById('score');
-                word_score.innerHTML = fill_score;
-                var letters = document.getElementById('reminders');
-                letters.innerHTML = lettersUsed; 
-
+                }else {
+                    ui.draggable.css("left", 0).css('top', 0);
+                }
             }
         });
         $(".tile").droppable({
             accept: ".letter",
-            accept: ".letter",
             drop: function (event, ui) {
-                // Get the position of the board tile
                 var boardTilePos = $(this).offset();
-        
-                // Position the draggable tile absolutely within the board tile
-                ui.draggable.offset({
+                // if it's not already on the board, allow the letter to be dropped
+                if (!(ui.draggable.hasClass("OnBoard"))) {
+
+                    ui.draggable.offset({
                     top: boardTilePos.top,
                     left: boardTilePos.left
                 }).addClass("OnBoard");
-                    
                     //if the board location is a doubleWord, signify that doubleWord bonus is in effect
                     if ($(this).attr('title') === 'doubleWord1') {
                         doubleWordFlag += 1;
                         ui.draggable.addClass("doubleWord");
-                        lettersUsed++;
                     }
                     if ($(this).attr('title') === 'doubleWord2') {
                         doubleWordFlag += 1;
-                        lettersUsed++;
                         ui.draggable.addClass("doubleWord");
                     }
-
+                    usedTiles += 1;
                     score += ScrabbleTiles[ui.draggable.attr('data-letter')].value;
                     //update score with correct wordScore bonus 
                     if (doubleWordFlag === 0) {
-                        var fill_score = " " + score;
+                        var fill_score = "" + score;
                     } else if (doubleWordFlag === 1) {
-                        var fill_score = " " + score * 2;
+                        var fill_score = "" + score * 2;
 
                     } else if (doubleWordFlag === 2) {
-                        var fill_score = " " + score * 4;
+                        var fill_score = "" + score * 4;
                     }
 
-
+                    updateLetter();
                     var word_score = document.getElementById('score');
                     word_score.innerHTML = fill_score;
-                    var letters = document.getElementById('reminders');
-                    letters.innerHTML = lettersUsed; 
-
                 }
-            
+            }
         });
     });
-
