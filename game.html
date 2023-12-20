@@ -1,0 +1,72 @@
+<!--
+    
+    File: game.html
+    GUI Assignment: Implementing a Bit of Scrabble with Drag and Drop
+    This website displays one line of the Scrabble Board to the user along with seven letter tiles on a tile rack. The user drags tiles to the board to make a word and their score is calculated. 
+    paschal ojatabu, UMass Lowell Computer Science, paschal_ojatabu@student.uml.edu
+    Copyright (c) 2023 by paschal. All rights reserved. May be freely copied or excerpted for educational purposes with credit to the author. updated by MA on December 20th, 2023 at 3:00 AM -->
+<!DOCTYPE html> 
+<html>
+    <head>
+        <!--Initial configuration-->
+        <meta charset = "utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Paschal Scrabble Game </title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- jQuery CSS -->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/game.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/scrabbleGame.js"></script>
+
+    </head>
+    <body>
+        <div id="contentWrap">
+            
+        </div>
+        <h1 class="ti">MY SCRABBLE GAME</h1>
+        <!-- Display the word and total score-->
+        <div class= "Scoreboard"> 
+            <div id="divScore"> Word score: <span id="score">0</span></div>
+            <div id="divTotalScore"> Total Score: <span id="totalScore">____</span></div>
+            <div id ="divRemainders">Letters used: <span id="remainders">7</span>/100</div>
+        </div>
+        <!-- Div where the board tiles are placed-->
+        <div id= "Board">
+            <table>
+                <tr>
+                    <td><img id="tile1" class="tile" title = "blank" src="pic/blankBoardTile.png"></td>
+                    <td><img id="tile2" class="tile" title = "doubleWord1" src="pic/doubleWordScore.png"></td>
+                    <td><img id="tile3" class="tile" title = "blank" src="pic/blankBoardTile.png"></td>
+                    <td><img id="tile4" class="tile" title = "blank" src="pic/blankBoardTile.png"></td>
+                    <td><img id="tile5" class="tile" title = "blank" src="pic/blankBoardTile.png"></td>
+                    <td><img id="tile6" class="tile" title = "doubleWord2" src="pic/doubleWordScore.png"></td>
+                    <td><img id="tile7" class="tile" title = "blank" src="pic/blankBoardTile.png"></td>
+                </tr>
+            </table>
+        </div>
+        <!-- Form with each button associated with a JS function-->
+        <form id = "controls">
+            <button type="button" onclick="return nextWord()">next word</button>
+            <button type="button" onclick="return restart()">Reset</button>
+        </form>
+        
+        <!-- Div where the letter tiles are placed, add a data letter tag to identify the letter-->
+        <div id="rack">
+            <img data-letter='A' id="letter1" class="letter" src="pic/Scrabble_Tiles/Scrabble_Tile_A.jpg">
+            <img data-letter='B'id="letter2" class="letter" src="pic/Scrabble_Tiles/Scrabble_Tile_B.jpg">
+            <img data-letter='C' id="letter3" class="letter" src="pic/Scrabble_Tiles/Scrabble_Tile_C.jpg">
+            <img data-letter='D'id="letter4" class="letter" src="pic/Scrabble_Tiles/Scrabble_Tile_D.jpg">
+            <img data-letter='E'id="letter5" class="letter" src="pic/Scrabble_Tiles/Scrabble_Tile_E.jpg">
+            <img data-letter='F'id="letter6" class="letter" src="pic/Scrabble_Tiles/Scrabble_Tile_F.jpg">
+            <img data-letter='G'id="letter7" class="letter" src="pic/Scrabble_Tiles/Scrabble_Tile_G.jpg">
+                </div>
+        </div>
+        <button> <a class="quit" href = "landingPage.html">Quit</a></button>
+       <footer id = "main-footer">
+        <p>Copyright &2023; Paschal's SCRABBLE</p>
+    </footer>
+    </body>
+</html>
